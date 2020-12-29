@@ -17,11 +17,11 @@ mtdata = pd.read_csv("mtcars.csv")
 # prepare variables
 mpg = mtdata.loc[:,"mpg"].to_numpy()   # miles per gallon
 wt = mtdata.loc[:,"wt"].to_numpy()     # weight of the car
-
+hp = mtdata.loc[:,"hp"].to_numpy()     # horsepower 
 
 # create scatter plot
 fig1, ax = plt.subplots(dpi = 300)
-ax.scatter(mpg, wt, marker='x', color='red')
+ax.scatter(mpg, hp, marker='x', color='red')
 
 
 # feature scaling
@@ -92,24 +92,26 @@ def univ_gradient_desc(y_data, x_data, alpha, convergence=1e-7, theta=[0,0], rec
 # implementation
 mpg_nor = feat_scale(mpg)
 wt_nor = feat_scale(wt)
-theta, h = univ_gradient_desc(mpg_nor, wt_nor, alpha = 0.01)
+hp_nor = feat_scale(hp)
+
+theta, h = univ_gradient_desc(mpg_nor, hp_nor, alpha = 0.01)
 
 #
 # plot the fitted lines
 fig2,ax = plt.subplots(dpi=300)
-ax.plot(wt_nor, h)
-ax.scatter(wt_nor,mpg_nor, marker='x', color='red')
+ax.plot(hp_nor, h)
+ax.scatter(hp_nor,mpg_nor, marker='x', color='red')
 
 #
 # contour graph
-thetas = univ_gradient_desc(mpg_nor, wt_nor, alpha = 0.1, theta=[0.5, 0.5], record_theta=True)
+thetas = univ_gradient_desc(mpg_nor, hp_nor, alpha = 0.1, theta=[0.5, 0.5], record_theta=True)
 
 theta_0 = np.linspace(-1,1,20)
 theta_1 = np.linspace(-1,1,20)
 
 theta_0, theta_1 = np.meshgrid(theta_0, theta_1)
 
-X = make_X(wt_nor)
+X = make_X(hp_nor)
 y = mpg_nor
 
 J_val = np.zeros((len(theta_0), len(theta_1)))
@@ -134,7 +136,7 @@ ax.set_title('Contour map of univariate gradient descend')
 
 #
 # descending through iterations
-thetas = univ_gradient_desc(mpg_nor, wt_nor, alpha = 0.1, theta=[0.5, 0.5], record_theta=True)
+thetas = univ_gradient_desc(mpg_nor, hp_nor, alpha = 0.1, theta=[0.5, 0.5], record_theta=True)
 J_rec = np.zeros(len(thetas))
 for i in range(0, len(J_rec)):
     J_rec[i] = Jcost(thetas[i], X, y)
