@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 
 # read data
-mtdata = pd.read_csv("mtcars.csv")
+mtdata = pd.read_csv('../ml_python/sample_data/mtcars.csv')
 
 
 # prepare variables
