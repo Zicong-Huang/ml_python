@@ -14,12 +14,19 @@ mtdata = pd.read_csv('../ml_python/sample_data/mtcars.csv')
 
 
 # prepare variables
-def choose_data(pd_dataframe, data):
-    return pd_dataframe.loc[:,data].to_numpy()
+def choose_data(pd_dataframe, *data):
+    chosen = list()
+    for d in data:
+        chosen.append(pd_dataframe.loc[:, d].to_numpy())
+    return chosen
 
 # feature scaling
-def feat_scale(feature):
-    return (feature - feature.mean()) / (feature.std())
+def feat_scale(*feature):
+    outcome = list()
+    for f in feature:
+        f_out = (f - f.mean()) / f.std()
+        outcome.append(f_out)
+    return outcome
 
 
 # compose the desired matrix
@@ -27,10 +34,7 @@ def make_X(*x_data):
     m = len(x_data[0])
     Xmat = np.ones(m)
     for x in x_data:
-        try:
-            Xmat = np.column_stack((Xmat, x))
-        except ValueError:
-            raise ValueError('Input arrays not in the length, try again')
+        Xmat = np.column_stack((Xmat, x))
     return Xmat
 
 
@@ -57,7 +61,7 @@ def gradient_desc(y_data, *x_data, alpha=0.01,
     y = y_data
     m,k = X.shape
     
-    # initilize parameters
+    # initailize parameters
     temp_theta = np.zeros(k)
     for i in range(0, len(theta)):
         temp_theta[i] = theta[i]
@@ -67,7 +71,7 @@ def gradient_desc(y_data, *x_data, alpha=0.01,
     J_diff = 10
     J = Jcost(theta, X, y)
 
-    # batch gradient descending, default
+    # batch gradient descending
     while J_diff > convergence:
         theta = gradient_update(X, y, theta, alpha, m)
         update_J = Jcost(theta,X,y)
@@ -83,21 +87,13 @@ def gradient_desc(y_data, *x_data, alpha=0.01,
 
 #
 # implementation
-mpg = choose_data(mtdata, 'mpg')
-hp = choose_data(mtdata, 'hp')
-wt = choose_data(mtdata, 'wt')    
-drat = choose_data(mtdata, 'drat')
-gear = choose_data(mtdata, 'gear')
-qsec = choose_data(mtdata, 'qsec')
-carb = choose_data(mtdata, 'carb')
 
-mpg_nor = feat_scale(mpg)
-wt_nor = feat_scale(wt)
-hp_nor = feat_scale(hp)
-drat_nor = feat_scale(drat)
-gear_nor = feat_scale(gear)
-qsec_nor = feat_scale(qsec)
-carb_nor = feat_scale(carb)
+mpg,hp,wt,drat,gear,qsec,carb = choose_data(mtdata, 'mpg','hp','wt','drat',
+                                            'gear','qsec','carb')
+
+mpg_nor, wt_nor, hp_nor, drat_nor = feat_scale(mpg, wt, hp, drat)
+
+gear_nor, qsec_nor, carb_nor = feat_scale(gear, qsec, carb)
 
 
 theta, h = gradient_desc(mpg_nor, wt_nor, hp_nor, drat_nor, gear_nor, 
