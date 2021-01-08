@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Created on Tue Dec 29 23:26:50 2020
+Created on Thu Jan  7 19:31:40 2021
 
 @author: jacob
 """
 
 import numpy as np
 import pandas as pd
-import seaborn as sns
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 # read data
@@ -20,7 +20,6 @@ def choose_data(pd_dataframe, *data):
     for d in data:
         chosen.append(pd_dataframe.loc[:, d].to_numpy())
     return chosen
-
 
 
 # feature scaling
@@ -49,9 +48,9 @@ def logistic(z):
 # hypothesis function
 def hypo(theta, X):
     linear = X @ theta
-    print(np.min(linear))
     h = logistic(linear)
     return h
+
 
 # cost function
 def Jcost(theta, X, y):
@@ -114,36 +113,36 @@ def gradient_desc_logistic(y_data, *x_data, alpha=0.01,
     if rec_J == True: yield Js
 
 
+# prepare for the data
+am, drat, wt = choose_data(mtdata, 'am', 'drat', 'wt')
+drat, wt = feat_scale(drat, wt)
+newdata = pd.DataFrame(dict(drat = drat, wt = wt, am = am))
 
-# implement gradient descending
-am, drat, wt, qsec = choose_data(mtdata, 'am', 'drat', 'wt', 'qsec')
-drat_nor, wt_nor, qsec_nor = feat_scale(drat, wt, qsec)
-theta, h, Js = gradient_desc_logistic(am, drat_nor, wt_nor, qsec_nor, alpha=0.1,
-                                  convergence=1e-6, rec_J=True)
+theta, h = gradient_desc_logistic(am, drat, wt, convergence=1e-6)
 
+a = -(theta[0]/theta[2])
+b = -(theta[1]/theta[2])
 
-# some plots
-fig1, ax = plt.subplots(dpi=200)
-sns.violinplot(x=am, y=drat)
-ax.set_ylabel('drat')
-ax.set_xlabel('am')
-ax.set_title('am distribution against drat')
+boundary = a + b*drat
+
+fig1, ax = plt.subplots(dpi=500)
+sns.scatterplot('drat','wt',data=newdata,hue='am',ax=ax)
+sns.lineplot(drat, boundary, ax=ax, color = 'r')
 plt.show()
 
-fig2, ax = plt.subplots(dpi=200)
-sns.violinplot(x=am, y=wt)
-ax.set_ylabel('wt')
-ax.set_xlabel('am')
-ax.set_title('am distribution against wt')
-plt.show()
+# another example
+am, wt, qsec = choose_data(mtdata, 'am', 'wt', 'qsec')
+wt, qsec = feat_scale(wt, qsec)
+newdata = pd.DataFrame(dict(wt = wt, qsec = qsec, am = am))
 
-fig3, ax = plt.subplots(dpi=200)
-sns.violinplot(x=am, y=qsec)
-ax.set_ylabel('qsec')
-ax.set_xlabel('am')
-ax.set_title('am distribution against qsec')
-plt.show()
+theta, h = gradient_desc_logistic(am, qsec, wt)
 
-fig4, ax = plt.subplots(dpi=200)
-ax.plot(Js)
+a = -(theta[0]/theta[2])
+b = -(theta[1]/theta[2])
+
+boundary = a + b*qsec
+
+fig2, ax = plt.subplots(dpi=500)
+sns.scatterplot('qsec','wt',data=newdata,hue='am',ax=ax)
+sns.lineplot(qsec, boundary, ax=ax, color = 'r')
 plt.show()

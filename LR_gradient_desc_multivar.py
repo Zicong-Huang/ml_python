@@ -73,11 +73,12 @@ def gradient_desc(y_data, *x_data, alpha=0.01,
 
     # batch gradient descending
     while J_diff > convergence:
-        theta = gradient_update(X, y, theta, alpha, m)
-        update_J = Jcost(theta,X,y)
+        update_theta = gradient_update(X, y, theta, alpha, m)
+        update_J = Jcost(update_theta,X,y)
         J_diff = J - update_J
         if J_diff < 0:
             raise RuntimeError("Not converging! WRONG! TRY SMALLER ALPHA!")
+        theta = update_theta
         J = update_J
 
     # calculate hypothesis h
