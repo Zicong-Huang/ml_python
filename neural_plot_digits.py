@@ -24,4 +24,6 @@ def draw_random_gray_scale_digit(gray_scale_data, size=(20, 20)):
 
 
 if __name__ == '__main__':
-    draw_random_gray_scale_digit()
+    import pandas as pd
+    gray_scale_data = pd.read_csv('../ml_python/sample_data/MNIST.csv', header=None).to_numpy()
+    draw_random_gray_scale_digit(gray_scale_data)
