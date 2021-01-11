@@ -20,7 +20,7 @@ draw_random_gray_scale_digit(gray_scale_data)
 
 
 '''Data partition'''
-train_size_per_digit = 100
+train_size_per_digit = 400
 train_set, valid_set = get_train_and_valid(gray_scale_data, train_size_per_digit)
 
 train_x = train_set[:, :col - 1]
@@ -75,4 +75,6 @@ print('Out sample accuracy:', '{percent:.2%}'.format(percent=out_accuracy))
 
 
 '''output trained theta'''
-np.savetxt('../ml_python/sample_data/one_layer_neural_theta.csv', all_theta, delimiter=',')
+save_text = input('Do you want to save the trained theta? [y/n]: ',)
+if save_text.strip().lower() == 'y':
+    np.savetxt('../ml_python/sample_data/one_layer_neural_theta.csv', all_theta, delimiter=',')
