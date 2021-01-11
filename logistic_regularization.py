@@ -7,9 +7,6 @@ Created on Fri Jan  8 01:37:41 2021
 
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-
 
 # read data
 mtdata = pd.read_csv('../ml_python/sample_data/mtcars.csv')
@@ -120,9 +117,5 @@ def gradient_desc_logistic(y_data, *x_data, alpha=0.01, lamb=0,
     if rec_J == True: yield Js
     
 
-# 
-am, drat, wt = choose_data(mtdata, 'am', 'drat', 'wt')
-drat, wt = feat_scale(drat, wt)
-newdata = pd.DataFrame(dict(drat = drat, wt = wt, am = am))
 
-theta, h = gradient_desc_logistic(am, drat, wt, lamb=10)
+

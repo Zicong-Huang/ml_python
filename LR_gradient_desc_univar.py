@@ -15,13 +15,14 @@ mtdata = pd.read_csv('../ml_python/sample_data/mtcars.csv')
 
 
 # prepare variables
-mpg = mtdata.loc[:,"mpg"].to_numpy()   # miles per gallon
-wt = mtdata.loc[:,"wt"].to_numpy()     # weight of the car
-hp = mtdata.loc[:,"hp"].to_numpy()     # horsepower 
+mpg = mtdata.loc[:, "mpg"].to_numpy()   # miles per gallon
+wt = mtdata.loc[:, "wt"].to_numpy()     # weight of the car
+hp = mtdata.loc[:, "hp"].to_numpy()     # horsepower
 
 # create scatter plot
-fig1, ax = plt.subplots(dpi = 300)
+fig1, ax = plt.subplots(dpi=300)
 ax.scatter(mpg, hp, marker='x', color='red')
+plt.show()
 
 
 # feature scaling
@@ -51,7 +52,7 @@ def gradient_update(X, y, theta, alpha, m):
 
 
 # gradient descending: set up
-def univ_gradient_desc(y_data, x_data, alpha, convergence=1e-7, theta=[0,0], record_theta=False):
+def univ_gradient_desc(y_data, x_data, alpha, convergence=1e-7, theta=[0, 0], record_theta=False):
     # set up
     m = len(y_data)
     X = make_X(x_data)
@@ -101,6 +102,7 @@ theta, h = univ_gradient_desc(mpg_nor, hp_nor, alpha = 0.01)
 fig2,ax = plt.subplots(dpi=300)
 ax.plot(hp_nor, h)
 ax.scatter(hp_nor,mpg_nor, marker='x', color='red')
+plt.show()
 
 #
 # contour graph
@@ -133,6 +135,7 @@ plt.colorbar(colored, shrink=0.8)
 ax.set_xlabel(r'$\theta_0$')
 ax.set_ylabel(r'$\theta_1$', rotation = 1)
 ax.set_title('Contour map of univariate gradient descend')
+plt.show()
 
 #
 # descending through iterations
@@ -146,4 +149,5 @@ ax.plot(J_rec)
 ax.set_xlabel('number of iterations')
 ax.set_ylabel('cost function values')
 ax.set_title('Cost function value over iterations')
+plt.show()
 
